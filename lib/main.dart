@@ -1,10 +1,8 @@
-// lib/main.dart
-
 import 'package:flutter/material.dart';
-import 'package:mis_productos/screens/home_screen.dart';
-import 'package:mis_productos/screens/search_screen.dart';
 import 'package:mis_productos/screens/food_details.dart';
-import 'package:mis_productos/models/dish.dart';
+import 'package:mis_productos/screens/home_screen.dart'; // Asegúrate de importar tus pantallas
+import 'package:mis_productos/screens/search_screen.dart';
+import 'package:mis_productos/screens/shopping_cart.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,27 +12,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Food Delivery App',
+      title: 'Mis Productos',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      initialRoute: '/',
       routes: {
-        '/shop': (context) => HomeScreen(),
+        '/': (context) => HomeScreen(), // Pantalla de inicio por defecto
+        '/home': (context) => HomeScreen(), // Asegúrate de que la ruta '/home' esté definida
         '/search': (context) => SearchScreen(),
-        //'/shopping_cart': (context) => ShoppingCartScreen(), // Define esta pantalla si no está definida
-        //'/admin': (context) => AdminScreen(), // Define esta pantalla si no está definida
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == '/food_details') {
-          final Dish dish = settings.arguments as Dish;
-          return MaterialPageRoute(
-            builder: (context) {
-              return FoodDetails(dish: dish);
-            },
-          );
-        }
-        return null;
+        '/shopping_cart': (context) => ShoppingCartScreen(),
+        // Agrega más rutas según sea necesario
       },
     );
   }

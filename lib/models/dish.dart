@@ -1,24 +1,34 @@
-// lib/models/dish.dart
-
 class Dish {
+  String? id; // Añadir el campo id
   final String name;
-  final String store;
-  final String image;
   final double price;
+  final String image;
+  final String store;
 
   Dish({
+    this.id,
     required this.name,
-    required this.store,
-    required this.image,
     required this.price,
+    required this.image,
+    required this.store,
   });
 
   factory Dish.fromJson(Map<String, dynamic> json) {
     return Dish(
+      id: json['id'],
       name: json['name'],
-      store: json['store'],
+      price: json['price'],
       image: json['image'],
-      price: json['price'].toDouble(),
+      store: json['store'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'price': price,
+      'image': image,
+      'store': store,
+    };
   }
 }
