@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:mis_productos/screens/food_details.dart';
-import 'package:mis_productos/screens/home_screen.dart'; // Asegúrate de importar tus pantallas
-import 'package:mis_productos/screens/search_screen.dart';
-import 'package:mis_productos/screens/shopping_cart.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:mis_productos/screens/home_screen.dart';
+import 'package:mis_productos/screens/initial.dart';
+import 'package:mis_productos/screens/login.dart';
+import 'package:mis_productos/screens/register.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID",
+    ),
+  );
   runApp(MyApp());
 }
 
@@ -12,17 +25,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mis Productos',
+      title: 'Food Delivery App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeScreen(), // Pantalla de inicio por defecto
-        '/home': (context) => HomeScreen(), // Asegúrate de que la ruta '/home' esté definida
-        '/search': (context) => SearchScreen(),
-        '/shopping_cart': (context) => ShoppingCartScreen(),
-        // Agrega más rutas según sea necesario
+        '/': (context) => InitialScreen(),
+        '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
+        '/store': (context) => HomeScreen(),
       },
     );
   }

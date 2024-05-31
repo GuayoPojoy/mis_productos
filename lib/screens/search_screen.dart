@@ -15,25 +15,43 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   Future<Map<String, dynamic>>? _searchResults;
   String _query = '';
+  Map<String, dynamic>? _allResults;
 
   @override
   void initState() {
     super.initState();
-    _searchResults = _fetchSearchResults();
+    _fetchSearchResults();
   }
 
-  Future<Map<String, dynamic>> _fetchSearchResults() async {
-    final response = await http.get(Uri.https("atumesa-83fd8-default-rtdb.firebaseio.com", '/Comida.json'));
-    if (response.statusCode == 200) {
-      return json.decode(response.body) as Map<String, dynamic>;
-    } else {
-      throw Exception('Failed to load search results');
+  Future<void> _fetchSearchResults() async {
+    try {
+      final response = await http.get(Uri.https("atumesa-83fd8-default-rtdb.firebaseio.com", '/Comida.json'));
+      if (response.statusCode == 200) {
+        setState(() {
+          _allResults = json.decode(response.body) as Map<String, dynamic>;
+          _searchResults = Future.value(_allResults);
+        });
+      } else {
+        throw Exception('Failed to load search results');
+      }
+    } catch (e) {
+      setState(() {
+        _searchResults = Future.error('Error fetching data: $e');
+      });
     }
   }
 
   void _onSearchChanged() {
     setState(() {
       _query = _searchController.text.toLowerCase();
+      if (_allResults != null) {
+        final filteredResults = _allResults!.entries.where((entry) {
+          final dishName = entry.value['name'].toString().toLowerCase();
+          return dishName.contains(_query);
+        });
+
+        _searchResults = Future.value(Map<String, dynamic>.fromEntries(filteredResults));
+      }
     });
   }
 
@@ -97,14 +115,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Text('No results found'),
                     );
                   } else {
-                    final filteredResults = snapshot.data!.entries.where((entry) {
-                      final dishName = entry.value['name'].toString().toLowerCase();
-                      return dishName.contains(_query);
-                    });
-
-                    final resultsMap = Map<String, dynamic>.fromEntries(filteredResults);
-
-                    return StoreDishes(resultsMap);
+                    return StoreDishes(snapshot.data!);
                   }
                 },
               ),

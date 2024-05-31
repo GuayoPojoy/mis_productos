@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:mis_productos/services/firebase_service.dart';
 import 'package:mis_productos/widgets/bottom_bar.dart';
-import 'dart:convert';
 import '../models/dish.dart';
 
 class ShoppingCartScreen extends StatefulWidget {
@@ -22,51 +21,50 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   }
 
   Future<void> fetchCartItems() async {
-    final response = await http.get(Uri.https('atumesa-83fd8-default-rtdb.firebaseio.com', '/Cart.json'));
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      final List<Dish> loadedItems = [];
-      data.forEach((key, value) {
-        final dish = Dish.fromJson(value);
-        dish.id = key; // Asigna la clave de Firebase al campo id del plato
-        loadedItems.add(dish);
-      });
+    try {
+      List<Dish> loadedItems = await FirebaseService.getDishes();
       setState(() {
         cartItems = loadedItems;
         calculateTotal();
       });
-    } else {
-      throw Exception('Failed to load cart items');
+    } catch (e) {
+      _showErrorDialog('Error loading cart items: $e');
     }
   }
 
   Future<void> addToCart(Dish dish) async {
-    final response = await http.post(
-      Uri.https('atumesa-83fd8-default-rtdb.firebaseio.com', '/Cart.json'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(dish.toJson()),
-    );
-
-    if (response.statusCode == 200) {
-      // Successfully added to cart
-      print('Added to cart');
-    } else {
-      throw Exception('Failed to add to cart');
+    try {
+      await FirebaseService.addToCart(dish);
+      setState(() {
+        cartItems.add(dish);
+        calculateTotal();
+      });
+    } catch (e) {
+      _showErrorDialog('Error adding to cart: $e');
     }
   }
 
   Future<void> removeFromCart(String dishId) async {
-    final response = await http.delete(
-      Uri.https('atumesa-83fd8-default-rtdb.firebaseio.com', '/Cart/$dishId.json'),
-    );
+    try {
+      await FirebaseService.removeFromCart(dishId);
+      setState(() {
+        cartItems.removeWhere((dish) => dish.id == dishId);
+        calculateTotal();
+      });
+    } catch (e) {
+      _showErrorDialog('Error removing from cart: $e');
+    }
+  }
 
-    if (response.statusCode == 200) {
-      // Successfully removed from cart
-      print('Removed from cart');
-    } else {
-      throw Exception('Failed to remove from cart');
+  Future<void> moveCartToOrder() async {
+    try {
+      await FirebaseService.moveCartToOrder();
+      setState(() {
+        cartItems.clear();
+        total = 0;
+      });
+    } catch (e) {
+      _showErrorDialog('Error moving items to orders: $e');
     }
   }
 
@@ -78,6 +76,24 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     setState(() {
       total = sum;
     });
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -106,20 +122,12 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         icon: Icon(Icons.remove),
                         onPressed: () async {
                           await removeFromCart(dish.id!);
-                          setState(() {
-                            cartItems.removeAt(index);
-                            calculateTotal();
-                          });
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () async {
                           await addToCart(dish);
-                          setState(() {
-                            cartItems.add(dish);
-                            calculateTotal();
-                          });
                         },
                       ),
                     ],
@@ -138,9 +146,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    // Lógica para realizar la orden
-                    // Puedes implementar tu lógica aquí
+                  onPressed: () async {
+                    await moveCartToOrder();
                   },
                   child: Text('Ordenar'),
                 ),

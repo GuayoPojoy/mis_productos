@@ -19,7 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Map<String, dynamic>> _fetchData() async {
     final String _baseUrl = "atumesa-83fd8-default-rtdb.firebaseio.com";
     final response = await http.get(Uri.https(_baseUrl, '/Comida.json'));
-    return json.decode(response.body);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   @override
@@ -37,8 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
-          } else {
+          } else if (snapshot.hasData) {
             return _getBody(_selectedIndex, snapshot.data);
+          } else {
+            return Center(
+              child: Text('No data available'),
+            );
           }
         },
       ),
@@ -48,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _selectedIndex = index;
           });
-          _navigateToScreen(context, index);
         },
       ),
     );
@@ -62,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const CustomHero(),
               const SizedBox(height: 16),
-              const SizedBox(height: 32),
               StoreDishes(data), // Pasamos los datos obtenidos de Firebase a StoreDishes
               SizedBox(height: MediaQuery.of(context).padding.bottom),
             ],
@@ -76,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _navigateToScreen(BuildContext context, int index) {
-    String routeName = '';
+    String routeName;
     switch (index) {
       case 0:
         routeName = '/shop';

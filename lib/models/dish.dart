@@ -1,5 +1,5 @@
 class Dish {
-  String? id; // Añadir el campo id
+  String? id; 
   final String name;
   final double price;
   final String image;
@@ -25,6 +25,7 @@ class Dish {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id, // Incluir el id en el toJson
       'name': name,
       'price': price,
       'image': image,

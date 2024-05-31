@@ -1,5 +1,3 @@
-// lib/screens/food_details.dart
-
 import 'package:flutter/material.dart';
 import 'package:mis_productos/models/dish.dart';
 
@@ -17,17 +15,42 @@ class FoodDetails extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(dish.image),
+            Center(
+              child: Image.network(
+                dish.image,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error, size: 100);
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                          : null,
+                    ),
+                  );
+                },
+              ),
+            ),
             SizedBox(height: 16),
             Text(
               dish.name,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-            Text('Store: ${dish.store}'),
+            Text(
+              'Store: ${dish.store}',
+              style: TextStyle(fontSize: 18),
+            ),
             SizedBox(height: 16),
-            Text('\$${dish.price}', style: TextStyle(fontSize: 24)),
+            Text(
+              '\$${dish.price}',
+              style: TextStyle(fontSize: 24),
+            ),
           ],
         ),
       ),
