@@ -1,4 +1,3 @@
-// services/firebase_service.dart
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/dish.dart';
@@ -19,6 +18,23 @@ class FirebaseService {
       return dishes;
     } else {
       throw Exception('Failed to load dishes');
+    }
+  }
+
+  // Obtener elementos del carrito
+  static Future<List<Dish>> getCartItems() async {
+    final response = await http.get(Uri.https(_baseUrl, '/Cart.json'));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      List<Dish> cartItems = [];
+      data.forEach((key, value) {
+        Dish dish = Dish.fromJson(value);
+        dish.id = key; // Guardar la clave para referencias futuras
+        cartItems.add(dish);
+      });
+      return cartItems;
+    } else {
+      throw Exception('Failed to load cart items');
     }
   }
 

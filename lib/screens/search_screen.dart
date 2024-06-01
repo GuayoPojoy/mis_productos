@@ -44,14 +44,14 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _navigateToHome(BuildContext context) {
-    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/store', (Route<dynamic> route) => false);
   }
 
   void _handleTabSelection(int index) {
     if (index != 1) {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        index == 0 ? '/home' : index == 2 ? '/shopping_cart' : '/admin',
+        index == 0 ? '/store' : index == 2 ? '/shopping_cart' : '/admin',
         (route) => false,
       );
     }

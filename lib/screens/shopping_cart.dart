@@ -22,7 +22,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
   Future<void> fetchCartItems() async {
     try {
-      List<Dish> loadedItems = await FirebaseService.getDishes();
+      List<Dish> loadedItems = await FirebaseService.getCartItems();
       setState(() {
         cartItems = loadedItems;
         calculateTotal();
@@ -35,10 +35,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   Future<void> addToCart(Dish dish) async {
     try {
       await FirebaseService.addToCart(dish);
-      setState(() {
-        cartItems.add(dish);
-        calculateTotal();
-      });
+      fetchCartItems(); // Refrescar la lista después de agregar
     } catch (e) {
       _showErrorDialog('Error adding to cart: $e');
     }
@@ -47,10 +44,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   Future<void> removeFromCart(String dishId) async {
     try {
       await FirebaseService.removeFromCart(dishId);
-      setState(() {
-        cartItems.removeWhere((dish) => dish.id == dishId);
-        calculateTotal();
-      });
+      fetchCartItems(); // Refrescar la lista después de eliminar
     } catch (e) {
       _showErrorDialog('Error removing from cart: $e');
     }
@@ -71,7 +65,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   void calculateTotal() {
     int sum = 0;
     for (var dish in cartItems) {
-      sum += dish.price.toInt(); // Asegúrate de que el precio sea int
+      sum += dish.price.toInt();
     }
     setState(() {
       total = sum;
@@ -142,7 +136,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total: Q. $total', // Muestra el total de la compra
+                  'Total: Q. $total',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
