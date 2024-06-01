@@ -24,32 +24,40 @@ class CustomBottomBar extends StatelessWidget {
               icon: Icon(Icons.home),
               color: selectedIndex == 0 ? Colors.black : Colors.grey,
               onPressed: () {
-                onTabSelected(0);
-                Navigator.pushNamedAndRemoveUntil(context, '/store', (route) => false);
+                if (selectedIndex != 0) {
+                  onTabSelected(0);
+                  Navigator.pushReplacementNamed(context, '/store');
+                }
               },
             ),
             IconButton(
               icon: Icon(Icons.search),
               color: selectedIndex == 1 ? Colors.black : Colors.grey,
               onPressed: () {
-                onTabSelected(1);
-                Navigator.pushNamedAndRemoveUntil(context, '/search', (route) => false);
+                if (selectedIndex != 1) {
+                  onTabSelected(1);
+                  Navigator.pushReplacementNamed(context, '/search');
+                }
               },
             ),
             IconButton(
               icon: Icon(Icons.shopping_cart),
               color: selectedIndex == 2 ? Colors.black : Colors.grey,
               onPressed: () {
-                onTabSelected(2);
-                Navigator.pushNamedAndRemoveUntil(context, '/shopping_cart', (route) => false);
+                if (selectedIndex != 2) {
+                  onTabSelected(2);
+                  Navigator.pushReplacementNamed(context, '/shopping_cart');
+                }
               },
             ),
             IconButton(
               icon: Icon(Icons.person),
               color: selectedIndex == 3 ? Colors.black : Colors.grey,
               onPressed: () {
-                onTabSelected(3);
-                Navigator.pushNamedAndRemoveUntil(context, '/admin', (route) => false);
+                if (selectedIndex != 3) {
+                  onTabSelected(3);
+                  Navigator.pushReplacementNamed(context, '/admin');
+                }
               },
             ),
           ],

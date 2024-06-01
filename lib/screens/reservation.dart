@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/firebase_service.dart';
 
 class ReservationScreen extends StatefulWidget {
   const ReservationScreen({Key? key}) : super(key: key);
@@ -37,6 +38,32 @@ class _ReservationScreenState extends State<ReservationScreen> {
       setState(() {
         _selectedTime = picked;
       });
+    }
+  }
+
+  Future<void> _submitReservation() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      // Crear un mapa con los datos de la reservación
+      Map<String, dynamic> reservationData = {
+        'name': _name,
+        'numberOfPeople': _numberOfPeople,
+        'date': _selectedDate?.toIso8601String(),
+        'time': _selectedTime?.format(context),
+      };
+
+      // Guardar los datos de la reservación en Firebase
+      try {
+        await FirebaseService.saveReservationData(reservationData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Reservación guardada exitosamente')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al guardar la reservación: $e')),
+        );
+      }
     }
   }
 
@@ -89,17 +116,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-
-                    print('Nombre: $_name');
-                    print('Número de personas: $_numberOfPeople');
-                    print('Fecha: $_selectedDate');
-                    print('Hora: $_selectedTime');
-                  }
-                },
-                child: Text('Submit'),
+                onPressed: _submitReservation,
+                child: Text('Reservar'),
               ),
             ],
           ),

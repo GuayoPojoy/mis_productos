@@ -3,11 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:mis_productos/screens/home_screen.dart';
 import 'package:mis_productos/screens/initial.dart';
 import 'package:mis_productos/screens/login.dart';
+import 'package:mis_productos/screens/payment.dart';
 import 'package:mis_productos/screens/register.dart';
 import 'package:mis_productos/screens/search_screen.dart';
 import 'package:mis_productos/screens/shopping_cart.dart';
-import 'package:mis_productos/screens/admin.dart'; // Importar AdminScreen
-import 'package:mis_productos/screens/reservation.dart'; // Importar ReservationScreen
+import 'package:mis_productos/screens/admin.dart';
+import 'package:mis_productos/screens/reservation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,16 +34,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
+      debugShowCheckedModeBanner: false, // Eliminar el banner de debug
       initialRoute: '/',
       routes: {
         '/': (context) => InitialScreen(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
-        '/store': (context) => HomeScreen(),
+        '/store': (context) => HomeScreen(),  // Ruta a HomeScreen
         '/search': (context) => SearchScreen(),
         '/shopping_cart': (context) => ShoppingCartScreen(),
-        '/admin': (context) => AdminScreen(), // Añadir la ruta de AdminScreen
-        '/reservation': (context) => ReservationScreen(), // Añadir la ruta de ReservationScreen
+        '/admin': (context) => AdminScreen(userName: ''), // Argumento requerido
+        '/reservation': (context) => ReservationScreen(),
+        '/payment': (context) => PaymentScreen(userName: ''),
       },
     );
   }

@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:mis_productos/screens/reservation.dart'; // Importar ReservationScreen
+import 'package:mis_productos/services/firebase_service.dart';
 import 'package:mis_productos/widgets/bottom_bar.dart';
 import 'package:mis_productos/widgets/square_button.dart';
 
 class AdminScreen extends StatelessWidget {
-  const AdminScreen({Key? key}) : super(key: key);
+  final String userName;
+
+  const AdminScreen({Key? key, required this.userName}) : super(key: key);
+
+  void _sendNotification(BuildContext context, String message) async {
+    try {
+      await FirebaseService.sendNotification(message);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Notificación enviada: $message')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al enviar notificación: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +48,7 @@ class AdminScreen extends StatelessWidget {
                   radius: 50,
                 ),
                 SizedBox(height: 8),
-                Text('Nombre de usuario'),
+                Text(userName),
               ],
             ),
           ),
@@ -50,21 +65,21 @@ class AdminScreen extends StatelessWidget {
                         icon: Icons.call,
                         label: 'Llamar Mesero',
                         onPressed: () {
-                          // Acción para llamar al mesero
+                          _sendNotification(context, 'Mesa está llamando al mesero');
                         },
                       ),
                       AdminActionButton(
                         icon: Icons.book,
                         label: 'Pedir Cuenta',
                         onPressed: () {
-                          // Acción para pedir la cuenta
+                          _sendNotification(context, 'Mesa pidió la cuenta');
                         },
                       ),
                       AdminActionButton(
                         icon: Icons.payment,
                         label: 'Pagar Cuenta',
                         onPressed: () {
-                          // Acción para pagar la cuenta
+                          Navigator.pushNamed(context, '/payment');
                         },
                       ),
                     ],

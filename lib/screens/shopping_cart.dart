@@ -153,13 +153,22 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: 2,
         onTabSelected: (index) {
-          if (index != 2) {
-            Navigator.of(context).pushReplacementNamed(
-              index == 0 ? '/shop' : '/search',
-            );
-          } else {
-            print('Selected shopping cart');
-          }
+          setState(() {
+            switch (index) {
+              case 0:
+                Navigator.pushReplacementNamed(context, '/store');
+                break;
+              case 1:
+                Navigator.pushReplacementNamed(context, '/search');
+                break;
+              case 2:
+                Navigator.pushReplacementNamed(context, '/shopping_cart');
+                break;
+              case 3:
+                Navigator.pushReplacementNamed(context, '/admin');
+                break;
+            }
+          });
         },
       ),
     );
