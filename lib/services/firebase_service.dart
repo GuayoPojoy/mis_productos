@@ -102,4 +102,19 @@ class FirebaseService {
       throw Exception('Failed to load user data');
     }
   }
+
+  // Crear un nuevo usuario
+  static Future<void> createUser(User user) async {
+    final response = await http.post(
+      Uri.https(_baseUrl, '/users.json'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(user.toJson()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to create user');
+    }
+  }
 }

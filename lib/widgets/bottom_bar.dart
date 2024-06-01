@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onTabSelected; // Agregar el parámetro onTabSelected
+  final Function(int) onTabSelected;
 
   const CustomBottomBar({
     Key? key,
@@ -23,34 +23,22 @@ class CustomBottomBar extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.home),
               color: selectedIndex == 0 ? Colors.black : Colors.grey,
-              onPressed: () {
-                onTabSelected(0);
-                Navigator.pushNamed(context, '/shop');
-              },
+              onPressed: () => onTabSelected(0),
             ),
             IconButton(
               icon: Icon(Icons.search),
               color: selectedIndex == 1 ? Colors.black : Colors.grey,
-              onPressed: () {
-                onTabSelected(1);
-                Navigator.pushNamed(context, '/search');
-              },
+              onPressed: () => onTabSelected(1),
             ),
             IconButton(
               icon: Icon(Icons.shopping_cart),
               color: selectedIndex == 2 ? Colors.black : Colors.grey,
-              onPressed: () {
-                onTabSelected(2);
-                Navigator.pushNamed(context, '/shopping_cart');
-              },
+              onPressed: () => onTabSelected(2),
             ),
             IconButton(
               icon: Icon(Icons.person),
               color: selectedIndex == 3 ? Colors.black : Colors.grey,
-              onPressed: () {
-                onTabSelected(3);
-                Navigator.pushNamed(context, '/admin');
-              },
+              onPressed: () => onTabSelected(3),
             ),
           ],
         ),

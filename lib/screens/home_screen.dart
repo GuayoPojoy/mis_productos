@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final String _baseUrl = "atumesa-83fd8-default-rtdb.firebaseio.com";
     final response = await http.get(Uri.https(_baseUrl, '/Comida.json'));
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      return json.decode(response.body) as Map<String, dynamic>;
     } else {
       throw Exception('Failed to load data');
     }
@@ -41,12 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
-          } else if (snapshot.hasData) {
-            return _getBody(_selectedIndex, snapshot.data);
-          } else {
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
               child: Text('No data available'),
             );
+          } else {
+            return _getBody(_selectedIndex, snapshot.data);
           }
         },
       ),
@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _selectedIndex = index;
           });
+          _navigateToScreen(context, index);
         },
       ),
     );
@@ -64,15 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getBody(int index, Map<String, dynamic>? data) {
     switch (index) {
       case 0:
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              const CustomHero(),
-              const SizedBox(height: 16),
-              StoreDishes(data), // Pasamos los datos obtenidos de Firebase a StoreDishes
-              SizedBox(height: MediaQuery.of(context).padding.bottom),
-            ],
-          ),
+        return Column(
+          children: [
+            const CustomHero(),
+            const SizedBox(height: 16),
+            Expanded(
+              child: StoreDishes(data), // Asegúrate de que StoreDishes tenga tamaño adecuado
+            ),
+          ],
         );
       case 1:
         return const SearchScreen();
@@ -82,10 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _navigateToScreen(BuildContext context, int index) {
-    String routeName;
+    String routeName = '';
     switch (index) {
       case 0:
-        routeName = '/shop';
+        routeName = '/home';
         break;
       case 1:
         routeName = '/search';
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
         routeName = '/admin';
         break;
       default:
-        routeName = '/shop';
+        routeName = '/home';
         break;
     }
     Navigator.pushNamed(context, routeName);

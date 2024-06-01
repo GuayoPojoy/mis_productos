@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mis_productos/services/firebase_service.dart';
 import 'package:mis_productos/widgets/custom_button.dart';
+import 'package:mis_productos/models/user.dart';
+import 'package:mis_productos/main.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -11,6 +13,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
@@ -51,6 +56,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      TextFormField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          labelText: 'Nombre',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor ingrese su nombre';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 8.0),
+                      TextFormField(
+                        controller: usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Nombre de usuario',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor ingrese su nombre de usuario';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 8.0),
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
@@ -142,18 +175,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        final newUser = User(
           email: emailController.text,
+          name: nameController.text,
           password: passwordController.text,
+          username: usernameController.text,
         );
-        Navigator.pushReplacementNamed(context, '/store');
-      } on FirebaseAuthException catch (e) {
-        setState(() {
-          _errorMessage = 'Error: ${e.message}';
-        });
+
+        await FirebaseService.createUser(newUser);
+
+        Navigator.pushReplacementNamed(context, Routes.home); // Usa la ruta correcta
       } catch (e) {
         setState(() {
-          _errorMessage = 'An unexpected error occurred';
+          _errorMessage = 'Error: ${e.toString()}';
         });
       } finally {
         setState(() {

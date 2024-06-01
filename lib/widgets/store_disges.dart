@@ -9,7 +9,7 @@ class StoreDishes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data == null) {
+    if (data == null || data!.isEmpty) {
       return Center(child: Text('No data available'));
     }
 
@@ -18,8 +18,6 @@ class StoreDishes extends StatelessWidget {
     }).toList();
 
     return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
       itemCount: dishes.length,
       itemBuilder: (context, index) {
         final dish = dishes[index];
