@@ -115,7 +115,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                 final dish = cartItems[index];
                 return ListTile(
                   title: Text(dish.name),
-                  subtitle: Text('${dish.price}'),
+                  subtitle: Text('Q.${dish.price}'),
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(dish.image),
                   ),

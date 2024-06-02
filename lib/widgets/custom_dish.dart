@@ -41,7 +41,7 @@ class CustomDish extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('\$${dish.price.toString()}'),
+            Text('\Q.${dish.price.toString()}'),
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
