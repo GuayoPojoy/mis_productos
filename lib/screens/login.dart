@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mis_productos/services/firebase_service.dart';
-import 'package:mis_productos/screens/home_screen.dart';  // Importar HomeScreen
+import 'package:mis_productos/screens/home_screen.dart'; 
 import 'package:mis_productos/widgets/custom_button.dart';
 import '../models/user.dart';
 
@@ -24,11 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (user != null) {
         setState(() {
-          _userName = user.name; // Guardar el nombre del usuario
+          _userName = user.name;
         });
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),  // Navegar a HomeScreen
+          MaterialPageRoute(builder: (context) => HomeScreen()),  
         );
       } else {
         _showErrorDialog('Usuario o contraseña incorrectos.');

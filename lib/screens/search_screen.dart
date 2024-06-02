@@ -20,6 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     _searchResults = _fetchSearchResults();
+    _searchController.addListener(_onSearchChanged);
   }
 
   Future<Map<String, dynamic>> _fetchSearchResults() async {
@@ -68,6 +69,16 @@ class _SearchScreenState extends State<SearchScreen> {
             _navigateToHome(context);
           },
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/logo.png', // Asegúrate de que el archivo logo.png esté en assets/images
+              width: 100,
+              height: 100,
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [

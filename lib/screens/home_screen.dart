@@ -70,7 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const CustomHero(),
             const SizedBox(height: 16),
             Expanded(
-              child: StoreDishes(data), // Asegúrate de que StoreDishes tenga tamaño adecuado
+              child: SingleChildScrollView(
+                child: StoreDishes(data), 
+              ),
             ),
           ],
         );

@@ -30,7 +30,7 @@ class AdminScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              // Acción para cerrar sesión
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
@@ -94,7 +94,6 @@ class AdminScreen extends StatelessWidget {
                           Navigator.pushNamed(context, '/reservation');
                         },
                       ),
-                      // Agregar más botones aquí si es necesario
                     ],
                   ),
                 ],
@@ -117,7 +116,7 @@ class AdminScreen extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/shopping_cart');
               break;
             case 3:
-              // Ya estás en la pantalla de administrador, no necesitas navegar a ella
+              // Already in admin screen, no action needed
               break;
             default:
               break;

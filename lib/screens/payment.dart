@@ -48,7 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     try {
       await FirebaseService.savePaymentData(paymentData);
-      await FirebaseService.clearOrders(); // Limpiar las órdenes después de procesar el pago
+      await FirebaseService.clearOrders(); 
       _showSuccessDialog();
     } catch (e) {
       _showErrorDialog('Error al procesar el pago: $e');
@@ -70,7 +70,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             child: Text('OK'),
             onPressed: () {
               Navigator.of(ctx).pop();
-              Navigator.of(ctx).pop(); // Navegar de vuelta
+              Navigator.of(ctx).pop(); 
             },
           ),
         ],

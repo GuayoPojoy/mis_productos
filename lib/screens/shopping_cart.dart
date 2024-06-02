@@ -35,7 +35,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   Future<void> addToCart(Dish dish) async {
     try {
       await FirebaseService.addToCart(dish);
-      fetchCartItems(); // Refrescar la lista después de agregar
+      fetchCartItems(); 
     } catch (e) {
       _showErrorDialog('Error adding to cart: $e');
     }
@@ -44,7 +44,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   Future<void> removeFromCart(String dishId) async {
     try {
       await FirebaseService.removeFromCart(dishId);
-      fetchCartItems(); // Refrescar la lista después de eliminar
+      fetchCartItems(); 
     } catch (e) {
       _showErrorDialog('Error removing from cart: $e');
     }
@@ -95,6 +95,16 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Orden'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/logo.png', 
+              width: 100, 
+              height: 100, 
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [

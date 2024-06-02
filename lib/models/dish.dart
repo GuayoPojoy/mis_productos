@@ -25,7 +25,7 @@ class Dish {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id, // Incluir el id en el toJson
+      'id': id, 
       'name': name,
       'price': price,
       'image': image,

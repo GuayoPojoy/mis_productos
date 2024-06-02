@@ -66,13 +66,13 @@ class InitialScreen extends StatelessWidget {
 
   void _navigateTo(BuildContext context, String routeName) {
     Navigator.pushNamed(context, routeName).catchError((error) {
-      // Manejar el error de navegación aquí
+      
       print('Error navigating to $routeName: $error');
     });
   }
 
   void _continueWithGoogle() {
-    // Implementar la lógica para continuar con Google
+    
     print('Continuar con Google');
   }
 }

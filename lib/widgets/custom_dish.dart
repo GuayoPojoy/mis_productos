@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mis_productos/models/dish.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:mis_productos/screens/food_details.dart';
 
 class CustomDish extends StatelessWidget {
   final Dish dish;
@@ -49,6 +50,14 @@ class CustomDish extends StatelessWidget {
             ),
           ],
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FoodDetails(dish: dish),
+            ),
+          );
+        },
       ),
     );
   }

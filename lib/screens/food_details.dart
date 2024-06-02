@@ -43,12 +43,12 @@ class FoodDetails extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Store: ${dish.store}',
+              'Categoria: ${dish.store}',
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 16),
             Text(
-              '\$${dish.price}',
+              '\Q.${dish.price}',
               style: TextStyle(fontSize: 24),
             ),
           ],
